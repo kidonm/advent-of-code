@@ -12,7 +12,7 @@ void solve()
         char c1, c2;
         ss >> c1 >> c2;
 
-        c2 -= ('X' - 'A') + 'A';
+        c2 -= 'X';
         c1 -= 'A';
 
         if (c2 == 0)
