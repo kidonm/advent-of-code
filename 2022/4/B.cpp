@@ -9,17 +9,11 @@ void solve()
     ll ans = 0;
     while (getline(cin, s))
     {
-        auto colon = s.find(',');
-        auto dash1 = s.find('-', 0);
-        auto dash2 = s.find('-', colon);
-
-        s.replace(colon, 1, " ");
-        s.replace(dash1, 1, " ");
-        s.replace(dash2, 1, " ");
-
         stringstream ss(s);
         ll a, b, c, d;
-        ss >> a >> b >> c >> d;
+        char skip;
+        ss >> a >> skip >> b >> skip >> c >> skip >> d;
+
         if (b < c || d < a)
             continue;
 
