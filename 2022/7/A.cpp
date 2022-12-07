@@ -20,8 +20,7 @@ long long walk()
             {
                 if (input[line][0] >= '0' && input[line][0] <= '9')
                 {
-                    stringstream ss(input[line]);
-                    ss >> size;
+                    sscanf(input[line].c_str(), "%d ", &size);
                     curr += size;
                 }
                 line++;
