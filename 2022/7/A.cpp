@@ -2,6 +2,9 @@
 
 using namespace std;
 
+vector<string> input;
+unsigned int line = 0;
+
 class Tree
 {
 public:
@@ -26,37 +29,27 @@ public:
     }
 };
 
-void debug_cin()
-{
-    string s;
-    cout << "Remaining cin:" << '\n';
-    while (getline(cin, s))
-        cout << s << "\\n"
-             << '\n';
-}
-
 void parse(Tree *root)
 {
     string s, skip, command, dir, name;
     int size;
-    while (getline(cin, s))
+    while (line < input.size())
     {
-        if (s[0] == '$')
+        // cout << input[line] << '\n';
+        if (input[line][0] == '$')
         {
-            // ss >> skip >> command;
-            if (s[2] == 'c')
+            if (input[line][2] == 'c')
             {
-                // string dir = s.substr(5);
-                if (s[5] == '.')
+                if (input[line][5] == '.')
                     root = root->parent;
                 else
-                    root = root->children[s.substr(5)];
+                    root = root->children[input[line].substr(5)];
             }
         }
         else
         {
-            stringstream ss(s);
-            if (s[0] >= '0' && s[0] <= '9')
+            stringstream ss(input[line]);
+            if (input[line][0] >= '0' && input[line][0] <= '9')
             {
                 ss >> size >> name;
                 root->size += size;
@@ -68,6 +61,7 @@ void parse(Tree *root)
                 root->children.insert({name, new Tree(false, name, 0, root)});
             }
         }
+        line++;
     }
 }
 
@@ -86,8 +80,7 @@ void dfs(Tree *t)
 
 void solve()
 {
-    string s;
-    getline(cin, s); // skip root
+    line++;
     Tree *t = new Tree(false, "/", 0, nullptr);
     parse(t);
     dfs(t);
@@ -100,6 +93,11 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     freopen("a.in", "r", stdin);
+
+    string s;
+    while (getline(cin, s))
+        input.push_back(s);
+
     auto start = std::chrono::high_resolution_clock::now();
     solve();
     auto elapsed = std::chrono::high_resolution_clock::now() - start;
