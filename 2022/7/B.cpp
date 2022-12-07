@@ -31,12 +31,10 @@ void parse(Tree *t);
 
 void parse_ls(Tree *root)
 {
-    cout << "parse ls" << '\n';
     string s;
     while (getline(cin, s) && s[0] != '$') // TODO the read line will need to be put back;
     {
         stringstream ss(s);
-        cout << ss.str() << "\n";
         if (s[0] >= '0' && s[0] <= '9') // is a leaf
         {
             long long size;
@@ -62,7 +60,6 @@ void parse_ls(Tree *root)
 
 void parse_left(string s, Tree *root)
 {
-    cout << "parse left: " << s << '\n';
     if (s[0] == '$')
     {
         stringstream ss(s);
@@ -84,7 +81,6 @@ void parse_left(string s, Tree *root)
 
 void parse(Tree *root)
 {
-    cout << "parse:" << root->name << '\n';
     string s;
     getline(cin, s);
 
@@ -135,16 +131,13 @@ void dfs_2(Tree *t, long long rem)
 
 void solve()
 {
-    map<string, long long>();
-
     string s;
     getline(cin, s); // skip root
     Tree *t = new Tree(false, "/", 0, nullptr);
     parse(t);
     dfs(t);
-    long long rem = 70000000 - t->size;
-    dfs_2(t, rem);
-    cout << ans << ' ' << ans2 << '\n';
+    // dfs_2(t, 70000000 - t->size);
+    cout << ans << '\n';
 }
 
 int main()
@@ -152,5 +145,8 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     freopen("b.in", "r", stdin);
+    auto start = std::chrono::high_resolution_clock::now();
     solve();
+    auto elapsed = std::chrono::high_resolution_clock::now() - start;
+    cout << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << '\n';
 }
