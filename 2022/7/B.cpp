@@ -121,6 +121,18 @@ void dfs(Tree *t)
     }
 }
 
+long long ans2 = 999999999999999999;
+
+void dfs_2(Tree *t, long long rem)
+{
+    for (auto &a : t->children)
+    {
+        dfs_2(a.second, rem);
+        if (!a.second->isLeaf && a.second->size + rem > 30000000)
+            ans2 = min(ans2 + rem, a.second->size + rem) - rem;
+    }
+}
+
 void solve()
 {
     map<string, long long>();
@@ -130,8 +142,9 @@ void solve()
     Tree *t = new Tree(false, "/", 0, nullptr);
     parse(t);
     dfs(t);
-    t->print();
-    cout << ans << '\n';
+    long long rem = 70000000 - t->size;
+    dfs_2(t, rem);
+    cout << ans << ' ' << ans2 << '\n';
 }
 
 int main()
