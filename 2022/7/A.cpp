@@ -4,87 +4,54 @@ using namespace std;
 
 vector<string> input;
 unsigned int line = 0;
+long long ans = 0;
 
-class Tree
+long long walk()
 {
-public:
-    bool isLeaf;
-    string name;
-    long long size;
-    Tree *parent;
-    map<string, Tree *> children;
-
-    Tree(bool isLeaf_, string name_, long long size_, Tree *parent_) : isLeaf(isLeaf_), name(name_), size(size_), parent(parent_), children(map<string, Tree *>()){};
-
-    void print()
-    {
-        print_("");
-    }
-
-    void print_(string off)
-    {
-        printf("%s %s %llu\n", off.c_str(), name.c_str(), size);
-        for (auto c : children)
-            c.second->print_(off + "  ");
-    }
-};
-
-void parse(Tree *root)
-{
-    string s, skip, command, dir, name;
+    long long curr = 0;
     int size;
     while (line < input.size())
     {
-        // cout << input[line] << '\n';
-        if (input[line][0] == '$')
+        if (input[line][2] == 'l') // ls
         {
-            if (input[line][2] == 'c')
+            line++;
+            while (line < input.size() && input[line][0] != '$')
             {
-                if (input[line][5] == '.')
-                    root = root->parent;
-                else
-                    root = root->children[input[line].substr(5)];
+                if (input[line][0] >= '0' && input[line][0] <= '9')
+                {
+                    stringstream ss(input[line]);
+                    ss >> size;
+                    curr += size;
+                }
+                line++;
+            }
+        }
+        else if (input[line][2] == 'c') // cd
+        {
+            if (input[line][5] == '.') // cd ..
+            {
+                line++;
+                if (curr <= 100000)
+                    ans += curr;
+                return curr;
+            }
+            else // cd somedir
+            {
+                line++;
+                curr += walk();
             }
         }
         else
-        {
-            stringstream ss(input[line]);
-            if (input[line][0] >= '0' && input[line][0] <= '9')
-            {
-                ss >> size >> name;
-                root->size += size;
-                // root->children.insert({name, new Tree(true, name, size, root)});
-            }
-            else
-            {
-                ss >> skip >> name;
-                root->children.insert({name, new Tree(false, name, 0, root)});
-            }
-        }
-        line++;
+            assert(false && "Unknown command");
     }
-}
 
-long long ans = 0;
-
-void dfs(Tree *t)
-{
-    for (auto &a : t->children)
-    {
-        dfs(a.second);
-        if (!a.second->isLeaf && a.second->size <= 100000)
-            ans += a.second->size;
-        t->size += a.second->size;
-    }
+    assert(false && "End");
 }
 
 void solve()
 {
     line++;
-    Tree *t = new Tree(false, "/", 0, nullptr);
-    parse(t);
-    dfs(t);
-    // t->print();
+    walk();
     cout << ans << '\n';
 }
 
@@ -93,6 +60,7 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     freopen("a.in", "r", stdin);
+    freopen("a.out.txt", "w", stdout);
 
     string s;
     while (getline(cin, s))
@@ -101,5 +69,5 @@ int main()
     auto start = std::chrono::high_resolution_clock::now();
     solve();
     auto elapsed = std::chrono::high_resolution_clock::now() - start;
-    cout << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << '\n';
+    cerr << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() << '\n';
 }
