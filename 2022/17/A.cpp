@@ -41,11 +41,8 @@ void solve()
 
         bool stop = false;
 
-        // print_chamber(s);
-
         for (; !stop; jet++)
         {
-            // printf("step=%d\n", jet);
             int dx = ds[input[jet % input.size()]];
             bool clear = true;
             for (auto &[y, x] : s)
@@ -66,7 +63,6 @@ void solve()
                 for (auto &[y, x] : s)
                     chamber[y][x] = '#';
                 stop = true;
-                // print_chamber(s, '#');
                 continue;
             }
 
@@ -75,12 +71,6 @@ void solve()
 
         while (chamber[0] == empty_row)
             chamber.pop_front();
-
-        // if (chamber[0] == "|#####..|")
-        // {
-        //     printf("loop=%d, jet=%d iter:%d\n", jet - prev, jet, jet % input.size());
-        //     prev = jet;
-        // }
     }
 
     cout << chamber.size() - 1 << '\n';
