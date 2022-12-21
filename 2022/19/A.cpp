@@ -23,14 +23,19 @@ void print_state(int t /*, map<string, map<string, int>> &costs*/, map<string, i
     cout << "]\n";
 };
 
+vector<int> bb(25, 0);
 int max_t = 24;
-int bt(int t, map<resource, map<resource, int>> &costs, map<resource, int> &robots, map<resource, int> &resources, set<resource> prev_skipped = {})
+void bt(int t, map<resource, map<resource, int>> &costs, map<resource, int> &robots, map<resource, int> &resources, set<resource> prev_skipped = {})
 {
     // print_state(t, /*costs,*/ robots, resources);
-    int ret = -1;
+    if (bb[t] > resources[geode])
+        return;
+
+    if (bb[t] < resources[geode])
+        bb[t] = resources[geode];
 
     if (t >= max_t)
-        return resources[geode];
+        return;
 
     set<resource> next_robots;
     for (auto &[robot, ignore] : robots)
@@ -45,14 +50,14 @@ int bt(int t, map<resource, map<resource, int>> &costs, map<resource, int> &robo
     for (auto &[robot, count] : robots)
         resources[robot] += count;
 
-    ret = bt(t + 1, costs, robots, resources, next_robots);
+    bt(t + 1, costs, robots, resources, next_robots);
     for (resource next_robot : next_robots)
     {
         if (robots[clay] > 1 && next_robot == ore)
             continue;
 
-        if (next_robots.count(geode) > 0 && next_robot != geode)
-            continue;
+        // if (next_robots.count(geode) > 0 && next_robot != geode)
+        //     continue;
 
         if (prev_skipped.count(next_robot) > 0)
             continue;
@@ -61,7 +66,7 @@ int bt(int t, map<resource, map<resource, int>> &costs, map<resource, int> &robo
         for (auto &[resource, count] : costs[next_robot])
             resources[resource] -= count;
 
-        ret = max(ret, bt(t + 1, costs, robots, resources));
+        bt(t + 1, costs, robots, resources);
 
         for (auto &[resource, count] : costs[next_robot])
             resources[resource] += count;
@@ -70,8 +75,6 @@ int bt(int t, map<resource, map<resource, int>> &costs, map<resource, int> &robo
 
     for (auto &[robot, count] : robots)
         resources[robot] -= count;
-
-    return ret;
 };
 
 map<string, resource> ress = {
@@ -102,18 +105,16 @@ void solve()
     }
 
     int ans = 0;
-    int acc = 0;
     for (int i = 0; i < (int)input.size(); i++)
     {
-
+        bb = vector(25, 0);
         map<resource, int> robots = {{ore, 1}, {clay, 0}, {obsidian, 0}, {geode, 0}};
         map<resource, int> resources = {{ore, 0}, {clay, 0}, {obsidian, 0}, {geode, 0}};
-
-        ans = (bt(0, input[i], robots, resources) * (i + 1));
-        acc += ans;
-
-        printf("id=%d ans=%d acc=%d\n", i + 1, ans, acc);
+        bt(0, input[i], robots, resources);
+        ans += (bb[24] * (i + 1));
+        // cout << ans << '\n';
     }
+    cout << ans << '\n';
 }
 
 int main()
