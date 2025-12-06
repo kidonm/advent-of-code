@@ -22,8 +22,9 @@ void solve() {
 
   // while(1): better be safe than sorry
   for (int _x = 0; _x < 10000; _x++) {
-    while (r < s[0].length() && (s.back()[r] == ' ')) r++;
-    // printf("%d %d\n", l, r);
+    // Trick: use the last row with operands to see find sections; 2 pointer
+    // approach.
+    while (r < (int)s[0].length() && (s.back()[r] == ' ')) r++;
     ll tmp_segment = s.back()[l] == '*' ? 1 : 0;
 
     for (int i = l; i < r - 1; i++) {
@@ -45,7 +46,7 @@ void solve() {
     printf("%lld \n", tmp_segment);
     ans += tmp_segment;
 
-    if (r == s[0].length()) break;
+    if (r == (int)s[0].length()) break;
     l = r;
     r += 1;
   }
