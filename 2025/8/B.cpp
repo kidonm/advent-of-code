@@ -52,7 +52,7 @@ void solve() {
 
   vector<int> par(N);
   iota(par.begin(), par.end(), 0);
-  vector<int> size(N, 1);
+  vector<int> rank(N, 0);
 
   int c = N;
   for (auto& [i, j, dist_sq] : d) {
@@ -61,9 +61,14 @@ void solve() {
 
     if (pi == pj) continue;
 
-    if (size[pi] < size[pj]) swap(pi, pj);
-    par[pj] = pi;
-    size[pi] += size[pj];
+    if (rank[pi] < rank[pj]) {
+      par[pi] = pj;
+    } else if (rank[pi] > rank[pj]) {
+      par[pj] = pi;
+    } else {
+      par[pj] = pi;
+      rank[pi]++;
+    }
 
     if (--c == 1) {
       printf("%lld\n", v[i].x * v[j].x);
