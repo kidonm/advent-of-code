@@ -47,9 +47,9 @@ void solve() {
     }
   }
 
-  for (auto& e : v) {
-    cout << e << '\n';
-  }
+  // for (auto& e : v) {
+  //   cout << e << '\n';
+  // }
 
   for (int i = 1; i < N; i++) {
     for (int j = 0; j < v[0].size(); j++) {

@@ -42,9 +42,9 @@ void solve() {
 
   ans = dfs(v, dp, 0, X);
 
-  for (auto& s : v) {
-    cout << s << '\n';
-  }
+  // for (auto& s : v) {
+  //   cout << s << '\n';
+  // }
 
   cout << ans << '\n';
 }

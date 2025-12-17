@@ -30,5 +30,12 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
   freopen("./A.in", "r", stdin);
+  auto start = chrono::high_resolution_clock::now();
   solve();
+  auto end = chrono::high_resolution_clock::now();
+  double time_taken =
+      chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+  time_taken *= 1e-6;
+  cout << "Time taken: " << fixed << time_taken << setprecision(9) << " millis"
+       << '\n';
 }
